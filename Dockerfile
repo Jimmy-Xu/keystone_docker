@@ -20,16 +20,19 @@ WORKDIR /keystone
 
 # Build Keystone
 RUN pip install -r requirements.txt
-#RUN pip install -r test-requirements.txt
+# RUN pip install -r test-requirements.txt
 RUN easy_install -U pip # For IncompleteRead
 RUN python setup.py install
 
 RUN mkdir -p /etc/keystone/
-RUN cp etc/* /etc/keystone/
+RUN cp -r etc/* /etc/keystone/
 RUN mv /etc/keystone/keystone.conf.sample /etc/keystone/keystone.conf
 RUN mv /etc/keystone/logging.conf.sample /etc/keystone/logging.conf
+RUN mkdir -p /var/log/keystone/
+
+RUN keystone-manage db_sync
 
 EXPOSE 5000
 EXPOSE 35357
 
-CMD /bin/bash
+CMD keystone-all
