@@ -10,8 +10,6 @@ RUN apt-get install -y python-pip
 RUN apt-get install -y libmysqlclient-dev # For MySQL-python
 RUN apt-get install -y libpq-dev # For pg_config
 RUN apt-get install -y libffi-dev # For ffi.h
-#RUN apt-get install -y testrepository # For run_tests.sh
-#RUN pip install netifaces # For glance cli
 RUN pip install python-keystoneclient
 
 # Get Keystone
@@ -22,7 +20,6 @@ WORKDIR /usr/lib/keystone
 RUN easy_install -U pip # For IncompleteRead
 RUN pip install -r requirements.txt
 RUN python setup.py install
-
 RUN mkdir -p /var/log/keystone/
 RUN mkdir -p /etc/keystone/
 RUN cp -r ./etc/* /etc/keystone/
