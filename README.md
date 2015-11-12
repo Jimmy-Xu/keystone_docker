@@ -6,7 +6,7 @@ This repo is the docker image of Liberty [Keystone](https://github.com/openstack
 
 ## Usage
 
-Run keystone service within one command.
+Run keystone in container.
 
 ```
 docker run -d -p 5000:5000 -p 35357:35357 tobegit3hub/keystone_docker
@@ -14,7 +14,7 @@ docker run -d -p 5000:5000 -p 35357:35357 tobegit3hub/keystone_docker
 
 ## Client
 
-Run keystone command-line client.
+Use keystone command-line client.
 
 ```
 docker run -i -t --net=host tobegit3hub/keystone_docker bash
@@ -22,13 +22,6 @@ docker run -i -t --net=host tobegit3hub/keystone_docker bash
 
 ```
 source openrc
-
-keystone user-list
-+----------------------------------+-------+---------+-------------------+
-|                id                |  name | enabled |       email       |
-+----------------------------------+-------+---------+-------------------+
-| 6c12289f2324405aaa068da611a8fad0 | admin |   True  | admin@example.com |
-+----------------------------------+-------+---------+-------------------+
 
 keystone user-create --name=admin --pass=ADMIN_PASS --email=admin@example.com
 +----------+----------------------------------+
@@ -49,7 +42,7 @@ keystone user-list
 +----------------------------------+-------+---------+-------------------+
 ```
 
-Access keystone  with keystone API.
+Use keystone API.
 
 ```
 curl -i \
