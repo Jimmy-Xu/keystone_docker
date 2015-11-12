@@ -15,17 +15,17 @@ RUN apt-get install -y libffi-dev # For ffi.h
 RUN pip install python-keystoneclient
 
 # Get Keystone
-ADD ./keystone /usr/lib/keystone
+ADD . /usr/lib/keystone
 WORKDIR /usr/lib/keystone
 
 # Build Keystone
+RUN easy_install -U pip # For IncompleteRead
 RUN pip install -r requirements.txt
-#RUN easy_install -U pip # For IncompleteRead
 RUN python setup.py install
 
 RUN mkdir -p /var/log/keystone/
 RUN mkdir -p /etc/keystone/
-#RUN cp -r etc/* /etc/keystone/
+RUN cp -r ./etc/* /etc/keystone/
 RUN mv /etc/keystone/keystone.conf.sample /etc/keystone/keystone.conf
 RUN mv /etc/keystone/logging.conf.sample /etc/keystone/logging.conf
 
