@@ -6,7 +6,7 @@ MAINTAINER Jimmy Xu <xjimmyshcn@gmail.com>
 # docker build -t xjimmyshcn/keystone_docker .
 #
 # - Start MySQL -
-# docker run --name mysql -e MYSQL_ROOT_PASSWORD=aaa123aa -P -d mysql
+# docker run --name mysql -v `pwd`/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=aaa123aa -P -d mysql
 #
 # - Start keystone as daemon -
 # docker run -d --name keystone -p 50000:5000 -p 35357:35357 --link mysql:mysql -e KEYSTONE_DB_USER=keystone -e KEYSTONE_DB_PASSWORD=aaa123aa -e KEYSTONE_DB_NAME=keystone xjimmyshcn/keystone_docker

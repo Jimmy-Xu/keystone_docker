@@ -1,65 +1,53 @@
-# Keystone Docker
+Quick Start: Run a keystone server with MySQL
 
-## Introduction
+>This repo is the docker image of Liberty Keystone.
 
-This repo is the docker image of Liberty [Keystone](https://github.com/openstack/keystone).
+============================================================================
 
-## Usage
+**Three containers**
 
-Run keystone in container.
+- **mysql**: db for keystone
+- **keystone**: link to mysql
+- **phpmyadmin**: link to mysql
 
-```
-docker run -d -p 5000:5000 -p 35357:35357 tobegit3hub/keystone_docker
-```
-
-## Client
-
-Use keystone command-line client.
 
 ```
-docker run -i -t --net=host tobegit3hub/keystone_docker bash
-```
+############################
+# get repo
+$ git clone https://github.com/Jimmy-Xu/keystone_docker.git -b mine
+$ cd keystone_docker
 
-```
-source openrc
+############################
+# build docker image
+$ docker build -t xjimmyshcn/keystone_docker .
 
-keystone user-create --name=admin --pass=ADMIN_PASS --email=admin@example.com
-+----------+----------------------------------+
-| Property |              Value               |
-+----------+----------------------------------+
-|  email   |        admin@example.com         |
-| enabled  |               True               |
-|    id    | 6c12289f2324405aaa068da611a8fad0 |
-|   name   |              admin               |
-| username |              admin               |
-+----------+----------------------------------+
+############################
+# Start mysql
+$ mkdir -p data
+$ docker run --name mysql -v `pwd`/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=aaa123aa -P -d mysql
 
-keystone user-list
-+----------------------------------+-------+---------+-------------------+
-|                id                |  name | enabled |       email       |
-+----------------------------------+-------+---------+-------------------+
-| 6c12289f2324405aaa068da611a8fad0 | admin |   True  | admin@example.com |
-+----------------------------------+-------+---------+-------------------+
-```
+# Start keystone as daemon
+$ docker run -d --name keystone -p 50000:5000 -p 35357:35357 --link mysql:mysql -e KEYSTONE_DB_USER=keystone -e KEYSTONE_DB_PASSWORD=aaa123aa -e KEYSTONE_DB_NAME=keystone xjimmyshcn/keystone_docker
 
-Use keystone API.
+# Start phpMyAdmin
+$ docker run -d --link mysql:mysql -e MYSQL_USERNAME=root --name phpmyadmin -p 8880:80 corbinu/docker-phpmyadmin
 
-```
-curl -i \
-  -H "Content-Type: application/json" \
-  -d '
-{ "auth": {
-    "identity": {
-      "methods": ["password"],
-      "password": {
-        "user": {
-          "name": "admin",
-          "domain": { "id": "default" },
-          "password": "ADMIN_PASS"
-        }
-      }
-    }
-  }
-}' \
-  http://localhost:5000/v3/auth/tokens ; echo
+############################
+# call keystone api
+curl -s -H "Content-Type: application/json" http://localhost:50000 | python -mjson.tool
+curl -s -H "Content-Type: application/json" http://localhost:35357 | python -mjson.tool
+
+############################
+# connect to mysql(phpMyAdmin)
+http://localhost:8880
+login user account:
+1) root:aaa123aa
+2) keystone:aaa123aa
+
+############################
+$ docker ps
+CONTAINER ID  IMAGE                       COMMAND                 CREATED        STATUS        PORTS                                              NAMES
+579d689b8945  corbinu/docker-phpmyadmin   "/bin/sh -c phpmyadmi"  1 minutes ago  Up 1 minutes  0.0.0.0:8880->80/tcp                               phpmyadmin
+6698b6628f9b  xjimmyshcn/keystone_docker  "/entrypoint.sh /bin/"  2 minutes ago  Up 2 minutes  0.0.0.0:35357->35357/tcp, 0.0.0.0:50000->5000/tcp  keystone
+9f153212629c  mysql                       "/entrypoint.sh mysql"  2 minutes ago  Up 2 minutes  0.0.0.0:32770->3306/tcp                            mysql
 ```
