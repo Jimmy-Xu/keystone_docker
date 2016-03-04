@@ -2,24 +2,6 @@ FROM ubuntu:14.04
 MAINTAINER Jimmy Xu <xjimmyshcn@gmail.com>
 
 ##########################################################################################
-# - Build -
-# docker build -t xjimmyshcn/keystone_docker .
-#
-# - Start MySQL -
-# docker run --name mysql -v `pwd`/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=aaa123aa -P -d mysql
-#
-# - Start keystone as daemon -
-# docker run -d --name keystone -p 50000:5000 -p 35357:35357 --link mysql:mysql -e KEYSTONE_DB_USER=keystone -e KEYSTONE_DB_PASSWORD=aaa123aa -e KEYSTONE_DB_NAME=keystone xjimmyshcn/keystone_docker
-#
-# - Start keystone for debug -
-# docker run -it --rm --link mysql:mysql -e KEYSTONE_DB_USER=keystone -e KEYSTONE_DB_PASSWORD=aaa123aa -e KEYSTONE_DB_NAME=keystone xjimmyshcn/keystone_docker bash
-#
-# - Start phpMyAdmin -
-# docker run -d --link mysql:mysql -e MYSQL_USERNAME=root --name phpmyadmin -p 8800:80 corbinu/docker-phpmyadmin
-##########################################################################################
-
-
-##########################################################################################
 # Set 163 apt source
 ADD etc/apt/sources.list /etc/apt/sources.list
 
