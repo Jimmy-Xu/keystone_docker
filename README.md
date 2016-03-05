@@ -83,3 +83,16 @@ $ curl -s -H "Content-Type: application/json" http://127.0.0.1:35357 | python -m
 user1) root:aaa123aa
 user2) keystone:aaa123aa
 ```
+## use keystone cli
+```
+//enter keystone container
+$ docker exec -it ks-server bash
+
+//run the following command in container
+$ source openrc
+$ keystone user-create --name=admin --pass=ADMIN_PASS --email=admin@example.com
+$ keystone user-list
+$ keystone user-create --name xjimmy --pass aaa123aa --email xjimmyshcn@gmail.com --enabled true
+$ keystone tenant-create --name helloworld --description "test" --enabled true
+$ keystone tenant-list
+```
